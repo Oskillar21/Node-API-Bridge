@@ -11,22 +11,27 @@ async function handleAsk(req, res) {
   }
 
   try {
-    // 1. Generar embedding del mensaje
-    const embedding = await generateEmbedding(message);
-
-    // 2. Consultar ChromaLoad con ese embedding
-    const relatedDocs = await queryChroma(embedding, 3); // top_k = 3
-
-    // 3. En esta versión, devolvemos directamente los documentos
-    res.json({
-      result: relatedDocs,
+    // Enviar mensaje ***Cambiar la url oscar mongolo
+    const response = await axios.post('http://localhost:5001/api/embedding', {
+      message: message,
     });
+
+    // Devolver respuesta
+    res.json(response.data);
+
   } catch (error) {
-    console.error(" Error en handleAsk:", error.message);
-    res
-      .status(500)
-      .json({ error: "Ocurrió un error al procesar la solicitud." });
+    console.error("Error en handleAsk:", error.message);
+
+    // Manejo de errores chat
+    if (error.response) {
+      return res.status(error.response.status).json({
+        error: error.response.data.error || "Error desde la segunda API.",
+      });
+    }
+
+    res.status(500).json({ error: "Ocurrió un error al comunicarse con la segunda API." });
   }
 }
+
 
 module.exports = { handleAsk };

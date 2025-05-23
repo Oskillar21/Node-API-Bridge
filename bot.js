@@ -13,9 +13,13 @@ client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
   try {
+
+    console.log(process.env.API_URL)
     const response = await axios.post(process.env.API_URL, {
       message: message.content,
     });
+
+    console.log("Message del bot.js",message)
 
     const result = response.data.result || 'No se encontró respuesta';
 
