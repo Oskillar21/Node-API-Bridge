@@ -16,16 +16,10 @@ async function handleAsk(req, res) {
       message: message,
     });
 
-    console.log("Message del ask.controller", message);
-    console.log("Response del ask.controller", response.data);
-  
     // Devolver respuesta
     res.json(response.data);
 
   } catch (error) {
-    console.error("Error en handleAsk:", error);
-    console.error("Error en handleAsk:", error.message);
-
     // Manejo de errores chat
     if (error.response) {
       return res.status(error.response.status).json({
