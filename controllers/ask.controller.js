@@ -12,7 +12,7 @@ async function handleAsk(req, res) {
 
   try {
     // Enviar mensaje ***Cambiar la url oscar mongolo
-    const response = await axios.post('http://localhost:5001/api/embedding', {
+    const response = await axios.post('http://localhost:8080/embeddings', {
       message: message,
     });
 
