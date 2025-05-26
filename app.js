@@ -4,8 +4,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+// Carga las variables de entorno desde el archivo .env
+require("dotenv").config();
+
 var askRouter = require("./routes/ask");
 
 var app = express();
@@ -20,8 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/ask", askRouter);
 
 // catch 404 and forward to error handler
