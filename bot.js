@@ -1,34 +1,38 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
-const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-
-client.on('ready', () => {
-  console.log(`Bot conectado como ${client.user.tag}`);
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
 });
 
-client.on('messageCreate', async (message) => {
-  // Evitar responderse a sí mismo o a otros bots
-  if (message.author.bot) return;
+const prefix = '/';
+const commands = new Map();
 
-  try {
+// Cargar todos los archivos en la carpeta "commands"
+const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`);
+  commands.set(command.name, command);
+}
 
-    console.log(process.env.API_URL)
-    const response = await axios.post(process.env.API_URL, {
-      message: message.content,
-    });
+client.once('ready', () => {
+  console.log(`Bot iniciado como ${client.user.tag}`);
+});
 
-    console.log("Message del bot.js",message)
+client.on('messageCreate', message => {
+  if (message.author.bot || !message.content.toLowerCase().startsWith(prefix.toLowerCase())) return;
 
-    const result = response.data.result || 'No se encontró respuesta';
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const commandName = args.shift().toLowerCase();
 
-    // Responder en el canal
-    await message.reply(result);
-  } catch (error) {
-    console.error('Error al consultar la API:', error.message);
-    await message.reply('Ocurrió un error al procesar tu mensaje.');
-  }
+  const command = commands.get(commandName) || commands.get('default');
+  command.execute(message, args);
 });
 
 client.login(process.env.DISCORD_TOKEN);
