@@ -17,9 +17,9 @@ async function handleAsk(message) {
   } catch (error) {
     // Manejo de errores
     if (error.response) {
-      throw new Error(error.response.data.error || "Error desde la segunda API.");
+      throw new Error(error.response.data.error || "Error desde Load-API.");
     }
-    throw new Error("Ocurrió un error al comunicarse con la segunda API.");
+    throw new Error("Ocurrió un error al comunicarse con Load-API.");
   }
 }
 
