@@ -1,6 +1,4 @@
 const axios = require("axios");
-const { generateEmbedding } = require("../services/embedding.service");
-const { queryChroma } = require("../services/chroma.service");
 
 // POST /ask
 async function handleAsk(req, res) {
