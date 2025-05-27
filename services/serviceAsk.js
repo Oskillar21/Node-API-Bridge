@@ -11,6 +11,9 @@ async function handleAsk(message) {
       message: message,
     });
 
+    //Depuración: imprimir la respuesta completa
+    console.log("Respuesta de Load-API:", response.data);
+    
     // Devolver respuesta
     return response.data;
 
