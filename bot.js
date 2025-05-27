@@ -43,6 +43,11 @@ client.on('messageCreate', async message => {
     }
     try {
       const respuesta = await handleAsk(pregunta);
+
+      // Log para depuración
+      console.log(`Pregunta: ${pregunta}`);
+      console.log(`Respuesta: ${respuesta.respuesta}`);
+
       await message.reply(respuesta.respuesta || 'No se obtuvo respuesta.');
     } catch (error) {
       await message.reply(error.message || 'Ocurrió un error al procesar tu mensaje.');
