@@ -26,7 +26,7 @@ client.once('ready', () => {
   console.log(`Bot iniciado como ${client.user.tag}`);
 });
 
-const { handleAsk } = require('./services/ServiceAsk');
+const { handleAsk } = require('./services/ServiceAsk.js');
 
 client.on('messageCreate', async message => {
   if (message.author.bot || !message.content.toLowerCase().startsWith(prefix.toLowerCase())) return;
