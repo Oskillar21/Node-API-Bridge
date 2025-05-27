@@ -7,8 +7,6 @@ var logger = require("morgan");
 // Carga las variables de entorno desde el archivo .env
 require("dotenv").config();
 
-var askRouter = require("./routes/ask");
-
 var app = express();
 
 // view engine setup
@@ -20,8 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/ask", askRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
