@@ -7,7 +7,7 @@ API en Node.js que actúa como puente entre ChromaDB y un bot de Discord. Facili
 
 - API RESTful para consultas vectoriales
 - Comunicación con ChromaDB
-- Integración con bots (como Discord)
+- Integración con bots (Discord)
 
 ## Instalación y uso
 
