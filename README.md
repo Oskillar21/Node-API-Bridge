@@ -1,6 +1,4 @@
 
-### 🔗 `Node-API-Bridge` → `README.md`
-
 # Node-API-Bridge
 
 API en Node.js que actúa como puente entre ChromaDB y un bot de Discord. Facilita la comunicación entre el motor de embeddings y una interfaz conversacional.
