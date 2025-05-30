@@ -6,63 +6,42 @@ async function handleAsk(message) {
   }
 
   try {
-    // Enviar mensaje a la segunda API
-    const response = await axios.post('http://api-load:8000/embeddings', {
-      message: message,
-    });
+    const openaiResponse = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content:
+              "Eres un asistente útil. Responde en no más de 40 palabras.",
+          },
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+        max_tokens: 60, // Aprox. 40 palabras
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+      }
+    );
 
-    //Depuración: imprimir la respuesta completa
-    console.log("Respuesta de Load-API:", response.data);
-    
-    // Devolver respuesta
-    return response.data;
-
+    return {
+      response: openaiResponse.data.choices[0].message.content.trim(),
+    };
   } catch (error) {
-    // Manejo de errores
+    console.error("Error desde OpenAI:", error.message);
     if (error.response) {
-      throw new Error(error.response.data.error || "Error desde Load-API.");
+      console.error(error.response.data);
     }
-    throw new Error("Ocurrió un error al comunicarse con Load-API.");
+    throw new Error("Error al consultar la IA.");
   }
 }
 
 module.exports = { handleAsk };
-
-/*
-const API_KEY = 'TU_API_KEY_AQUI';
-
-async function consultaCorta(prompt) {
-  try {
-    const response = await axios.post(
-      'https://api.openai.com/v1/completions',
-      {
-        model: 'text-davinci-003',
-        prompt: prompt,
-        max_tokens: 50,       // Limita la respuesta a ~30-35 palabras
-        temperature: 0.5,     // Controla la creatividad
-        top_p: 1,
-        n: 1,
-        stop: ['\n']
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    const texto = response.data.choices[0].text.trim();
-    console.log(texto);
-    return texto;
-  } catch (error) {
-    console.error('Error al consultar la API de OpenAI:', error.response?.data || error.message);
-    return 'Ocurrió un error al obtener la respuesta.';
-  }
-}
-
-// Ejemplo de uso
-consultaCorta("¿Qué es una API?");
-
-
-*/
